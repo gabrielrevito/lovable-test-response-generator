@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -66,7 +65,18 @@ const Index = () => {
       }
 
       const data = await response.json();
-      setResponse(data.response || data.message || "Resposta gerada com sucesso!");
+      console.log("N8N Response:", data);
+      
+      // Extract the response text, handling nested structure
+      let responseText = data.response?.output || data.output || data.response || data.message || "Resposta gerada com sucesso!";
+      
+      // Ensure we're setting a string, not an object
+      if (typeof responseText === 'object') {
+        responseText = JSON.stringify(responseText);
+      }
+      
+      console.log("Setting response text:", responseText);
+      setResponse(responseText);
       
       toast({
         title: "Sucesso",
